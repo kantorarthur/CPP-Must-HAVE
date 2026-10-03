@@ -1,0 +1,26 @@
+﻿shm
+
+-Aceste functii sunt folosite in contextul asta mai mult: 
+Nu ai un fisier pe care vrei sa-l mapezi. 
+Vrei sa faci tu un fisier nou care sa serveasca drept un fisier mapat in memorie si share-uit intre procese (adica practic vrei sa creezi o memorie partajata intre procese).
+
+int shm_open(const char* name, int oflag, mode_t mode) - Creeaza sau deschide o zona de memorie partajata(sub forma unui fisier).
+Functioneaza in mod similar cu syscall-ul "open" pentru fisiere, returnand un descriptor de fisier, care apoi se poate mapa in memorie cu mmap.
+
+name - Numele memoriei partajate. Daca doua procese apeleaza shm_open cu acelasi nume, vor primi acces la aceeasi zona de memorie. **ESTE RECOMAND SA FOLOSIM '/' LA INCEPUTUL NUMELUI MEMORIEI PARTAJATE**
+
+oflag - Poate fi O_RDONLY (citire), O_RDWR(citire si scriere). Acestea pot fi combinate prin SAU LOGIC cu alte flag-uri, precum O_CREAT care indica creearea memoriei partajate daca nu exista.
+
+mode - contine permisiunile memoriei partajate (similare cu permisiunile unui fisier) si este luat in considerare doar cand memoria se creeaza. (0600 si alea)
+
+In caz de esec functia returneaza o valoare negativa.
+
+shm_unlink(const char* name) - Acest syscall realizeaza eliberarea memoriei partajate.
+Dupa ce se apeleaza acest syscall, memoria partajate nu se mai poate deschide(decat dupa ce se deschide din nou), dar procesele care au deschis-o inainte de unlink inca pot sa lucreze pe ea, stergerea efectiva facandu-se doar dupa ce ultimul proces inchide maparea.
+
+ftruncate(int fd, off_t length) - Acest syscall functioneaza atat pt fisiere obisnuite, cat si pentru memorie partajata. 
+Acest syscall atribuie o marime (in bytes) fisierului dat ca fd.
+
+fd - file descriptor pe care sa se atribuie marimea
+length - marime in bytes 
+!!!   In cazul memoriei partajate e foarte important sa apelam "ftruncate", fiindca prima data cand se creeaza este goala si nu ii este definita dimensiunea.

@@ -1,0 +1,1 @@
+﻿Sa folosim hashmap cu adresare deschisa si cautare liniara, astfel sa putem accesa cat mai mult posibil adrese contigue sau cat mai apropiate pentru a reduce cache miss-urile.
