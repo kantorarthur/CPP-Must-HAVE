@@ -1,0 +1,1 @@
+In CPP, clasele care au doar functii virtuale pure sunt folosite drept interfete.
